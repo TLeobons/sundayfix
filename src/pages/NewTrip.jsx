@@ -1,8 +1,8 @@
-import Loader from 'react-loader-spinner'
-import Modal from 'react-modal'
 import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import Loader from 'react-loader-spinner'
+import Modal from 'react-modal'
 import { motion } from 'framer-motion'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
@@ -15,32 +15,24 @@ import { TripContext } from 'contexts/TripContext'
 import { api } from 'services/httpService'
 
 import { device } from 'style/responsive'
+import { ReactComponent as Check } from 'assets/Check.svg'
 import 'react-dropdown/style.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import { ReactComponent as Check } from 'assets/Check.svg'
 
 const NewTrip = () => {
+
   const [state, dispatch] = useContext(TripContext)
   const xValues = [5000, -40, 0]
   const [modalIsOpen, setIsOpen] = useState(false)
   const [endDateMin, setEndDateMin] = useState(moment().toDate())
   const [endDateVal, setEndDateVal] = useState('')
-  function openModal() {
-    setIsOpen(true)
-  }
-  function closeModal() {
-    setIsOpen(false)
-  }
+  
   const addNewTrip = async () => {
-    let resp;
+    let resp
     try {
-      resp = await api.post('/trip', state.form, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      })
+      resp = await api.post('/trip', state.form)
       dispatch({ type: 'ADD_TRIP', payload: { ...state.form, id: resp.data.id } })
-      await openModal()
+      await setIsOpen(true)
     } catch (e) {
       console.error(e)
     }
@@ -67,16 +59,14 @@ const NewTrip = () => {
       ? moment(state.form.start_date, 'YYYY-MM-DD').toDate()
       : ''
 
-
   return (
     <Container>
-      {/*  */}
       <Main>
         <Heading title="New trip" />
         <Modal
           isOpen={modalIsOpen}
           style={customStyles}
-          onRequestClose={closeModal}
+          onRequestClose={()=>setIsOpen(false)}
         >
           <Form
             initial={{ opacity: 0, scale: 0.75 }}
@@ -293,7 +283,6 @@ const NewTrip = () => {
                 >
                   <Label htmlFor="zipCode">Zip code</Label>
                   <Input
-                    required={true}
                     id="zipCode"
                     name="zipCode"
                     placeholder="Type here..."
@@ -397,10 +386,10 @@ const NewTrip = () => {
 export default NewTrip
 
 const DPDown = styled(motion.div)``
+
 const FormButtonGroup = styled.div`
   flex-direction: row;
 `
-
 const AcceptDeleteButton = styled(motion.div)`
   background: red;
   font-size: 1.6rem;
@@ -419,7 +408,6 @@ const AcceptDeleteButton = styled(motion.div)`
     margin-left: auto;
   }
 `
-
 const StyledLoader = styled(Loader)`
   display: flex;
   justify-content: center;
@@ -461,17 +449,14 @@ const FormContent = styled.div`
     width: 10px;
   }
 
-  /* Track */
   &::-webkit-scrollbar-track {
     background: white;
   }
 
-  /* Handle */
   &::-webkit-scrollbar-thumb {
     background: #ccc;
   }
 
-  /* Handle on hover */
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }

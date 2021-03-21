@@ -199,4 +199,5 @@ const NonClickableLink = styled.span`
   flex: 1;
   color: #97999b;
   opacity: 0.5;
+  cursor: initial;
 `

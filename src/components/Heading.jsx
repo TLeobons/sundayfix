@@ -23,9 +23,9 @@ const Heading = ({ title }) => {
 export default Heading
 
 const HeadingStyled = styled.h1`
-  padding: 2.5rem 3rem;
+  /* padding: 2.5rem 3rem; */
   border-bottom: 1px solid var(--grey);
-  width: 100%;
+  width: 90%;
   font-size: 2.5rem;
   border-bottom: 1px solid #f1f1f2;
   display: flex;

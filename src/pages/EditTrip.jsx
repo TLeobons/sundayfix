@@ -1,30 +1,30 @@
-import { ReactComponent as Check } from 'assets/Check.svg'
+import { useContext, useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import moment from 'moment'
+import Modal from 'react-modal'
+import { motion } from 'framer-motion'
+import styled from 'styled-components'
+import Loader from 'react-loader-spinner'
+import DatePicker from 'react-datepicker'
+import Dropdown from 'react-dropdown'
+
 import Heading from 'components/Heading'
 import Sidebar from 'components/Sidebar'
 import SidebarCard from 'components/SidebarCard'
 import { TripContext } from 'contexts/TripContext'
-import { motion } from 'framer-motion'
-import moment from 'moment'
-import React, { useContext, useEffect,useState } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import Dropdown from 'react-dropdown'
-import { useParams } from 'react-router-dom'
-import 'react-dropdown/style.css'
-import Loader from 'react-loader-spinner'
-import Modal from 'react-modal'
-import { Link } from 'react-router-dom'
 import { api } from 'services/httpService'
+
+import 'react-datepicker/dist/react-datepicker.css'
+import 'react-dropdown/style.css'
 import { device } from 'style/responsive'
-import styled from 'styled-components'
+import { ReactComponent as Check } from 'assets/Check.svg'
 
 const NewTrip = () => {
   const [state, dispatch] = useContext(TripContext)
-  console.log('form data', state.form)
   const { id } = useParams()
 
   const xValues = [5000, -40, 0]
-  const [modalIsOpen, setIsOpen] = React.useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false)
   const [endDateMin, setEndDateMin] = useState(
     state.form.start_date !== ''
       ? moment(state.form.start_date).add(1,'day').toDate()
@@ -35,13 +35,6 @@ const NewTrip = () => {
       ? moment(state.form.end_date).toDate()
       : ''
   )
-  
-  function openModal() {
-    setIsOpen(true)
-  }
-  function closeModal() {
-    setIsOpen(false)
-  }
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -53,17 +46,9 @@ const NewTrip = () => {
 
   const editTrip = async () => {
     try {
-      const response = await api.put(`/trip/${id}`, state.form, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Headers':
-            'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-          'Access-Control-Request-Method': 'GET, POST, DELETE, PUT, OPTIONS',
-        },
-      })
+      const response = await api.put(`/trip/${id}`, state.form)
       dispatch({ type: 'EDIT_TRIP', payload: response.data })
-      await openModal()
+      await setIsOpen(true)
     } catch (e) {
       console.error(e)
     }
@@ -81,7 +66,6 @@ const NewTrip = () => {
     },
   }
 
-
   let startDate =
     state.form.start_date !== ''
       ? moment(state.form.start_date, 'YYYY-MM-DD').toDate()
@@ -96,7 +80,7 @@ const NewTrip = () => {
         <Modal
           isOpen={modalIsOpen}
           style={customStyles}
-          onRequestClose={closeModal}
+          onRequestClose={()=>setIsOpen(false)}
         >
           <Form
             initial={{ opacity: 0, scale: 0.75 }}
@@ -125,7 +109,6 @@ const NewTrip = () => {
           <FormContent>
             <InnerForm>
               <FormGroup>
-                {/* <FormInnerGroup animate={{ x: xValues }} transition={{ duration: 1 }}> */}
                 <DPDown animate={{ x: xValues }} transition={{ duration: 1 }}>
                   <Label htmlFor="countries">Where do you want to go</Label>
                   <Dropdown
@@ -137,14 +120,6 @@ const NewTrip = () => {
                     placeholder={state.form.address.country || 'Select country'}
                     value={state.form.address.country}
                     onChange={data => {
-                      /*dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          address: {
-                            country: data.value,
-                          },
-                        },
-                      })*/
                       dispatch({
                         type: 'SET_SELECTED_COUNTRY',
                         payload: data.value,
@@ -152,7 +127,6 @@ const NewTrip = () => {
                     }}
                   />
                 </DPDown>
-                {/* </FormInnerGroup> */}
               </FormGroup>
 
               <FormGroup>
@@ -247,7 +221,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.company_name}
                   />
                 </FormInnerGroup>
 
@@ -271,7 +244,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.city}
                   />
                 </FormInnerGroup>
 
@@ -295,7 +267,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.street}
                   />
                 </FormInnerGroup>
 
@@ -321,7 +292,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.street_num}
                   />
                 </FormInnerGroup>
 
@@ -345,7 +315,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.zip}
                   />
                 </FormInnerGroup>
               </FormGroup>
@@ -502,17 +471,14 @@ const FormContent = styled.div`
     width: 10px;
   }
 
-  /* Track */
   &::-webkit-scrollbar-track {
     background: white;
   }
 
-  /* Handle */
   &::-webkit-scrollbar-thumb {
     background: #ccc;
   }
 
-  /* Handle on hover */
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
@@ -602,7 +568,7 @@ const Input = styled.input`
   line-height: 2rem;
 
   &::placeholder {
-    color: #d0d0ce;
+    color: var(--dark-grey);
   }
 
   &:focus {

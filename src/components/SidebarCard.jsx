@@ -15,6 +15,8 @@ import { ReactComponent as SpainFlag } from 'assets/flags/spain.svg'
 import { ReactComponent as SwedenFlag } from 'assets/flags/sweden.svg'
 import { ReactComponent as UnitedKingdomFlag } from 'assets/flags/united-kingdom.svg'
 
+
+
 const FlagIcon = ({ flag }) => {
   switch (flag) {
     case 'at':

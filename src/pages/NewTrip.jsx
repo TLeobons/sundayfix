@@ -23,6 +23,8 @@ const NewTrip = () => {
   const [state, dispatch] = useContext(TripContext)
   const xValues = [5000, -40, 0]
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [endDateMin, setEndDateMin] = useState(moment().toDate())
+  const [endDateVal, setEndDateVal] = useState('')
   function openModal() {
     setIsOpen(true)
   }
@@ -37,7 +39,7 @@ const NewTrip = () => {
           'Access-Control-Allow-Origin': '*',
         },
       })
-      dispatch({ type: 'ADD_TRIP', payload: {...state.form,id:resp.data.id} })
+      dispatch({ type: 'ADD_TRIP', payload: { ...state.form, id: resp.data.id } })
       await openModal()
     } catch (e) {
       console.error(e)
@@ -65,10 +67,6 @@ const NewTrip = () => {
       ? moment(state.form.start_date, 'YYYY-MM-DD').toDate()
       : ''
 
-  let endDate =
-    state.form.end_date !== ''
-      ? moment(state.form.end_date, 'YYYY-MM-DD').toDate()
-      : ''
 
   return (
     <Container>
@@ -136,7 +134,18 @@ const NewTrip = () => {
                     <DatePicker
                       required
                       selected={startDate}
-                      onChange={date => {
+                      onChange={(date) => {
+                        let nextDay = moment(date).add(1, 'day').toDate();
+                        setEndDateMin(nextDay)
+                        if (moment(state.form.end_date) <= moment(date)) {
+                          setEndDateVal('');
+                          dispatch({
+                            type: 'SET_EndDate',
+                            payload: {
+                              end_date: '',
+                            },
+                          })
+                        }
                         dispatch({
                           type: 'SET_StartDate',
                           payload: {
@@ -165,12 +174,13 @@ const NewTrip = () => {
                   <DatePickerWrap>
                     <DatePicker
                       required
-                      selected={endDate}
+                      selected={endDateVal}
                       onChange={date => {
+                        setEndDateVal(moment(date).toDate())
                         dispatch({
-                          type: 'SET_EndDate',
+                      type: 'SET_EndDate',
                           payload: {
-                            end_date: moment(date).format('YYYY-MM-DD'),
+                      end_date: moment(date).format('YYYY-MM-DD'),
                           },
                         })
                       }}
@@ -178,7 +188,7 @@ const NewTrip = () => {
                       name="endDate"
                       placeholderText="dd. mm. year"
                       dateFormat="dd. MM. yyyy"
-                      minDate={moment().toDate()}
+                      minDate={endDateMin}
                       showTwoColumnMonthYearPicker
                       showPopperArrow={false}
                     />

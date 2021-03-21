@@ -25,7 +25,7 @@ import NetherlandsFlag from 'assets/flags/netherlands.svg'
 import PortgualFlag from 'assets/flags/portugal.svg'
 import SlovakiaFlag from 'assets/flags/slovakia.svg'
 import SpainFlag from 'assets/flags/spain.svg'
-import SweedenFlag from 'assets/flags/spain.svg'
+import SweedenFlag from 'assets/flags/sweden.svg'
 import UnitedKingdomFlag from 'assets/flags/united-kingdom.svg'
 
 const flags = {

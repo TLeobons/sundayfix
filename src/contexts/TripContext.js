@@ -49,13 +49,12 @@ const reducer = (state, action) => {
       
       let newState =  {
         trips: [...state.trips],
-        form: { ...state.form },
+        form: {...state.form },
         countries: [...state.countries],
         selectedCountry: `flag-${state.selectedCountry}`,
       }
       let newTrip = {...state.form,id:action.payload.id}
-      newState.trips = newState.trips.filter(
-        e=> e.id !== action.payload.id)
+      newState.trips = newState.trips.filter(item=> item.id !== action.payload.id)
       newState.trips.push(newTrip)
       return {...newState}
 
@@ -74,9 +73,9 @@ const reducer = (state, action) => {
         selectedCountry: `flag-${state.selectedCountry}`,
       }
     case 'REMOVE_TRIP':
-      const filter = [...state.trips.filter(trip => trip.id !== action.payload)]
+      const filtered = [...state.trips.filter(trip => trip.id !== action.payload)]
       return {
-        trips: filter,
+        trips: filtered,
         form: { ...state.form },
         countries: [...state.countries],
         selectedCountry: `flag-${state.selectedCountry}`,
@@ -121,10 +120,10 @@ const reducer = (state, action) => {
       return {
         ...tmpp
       }
-      case 'SET_Covid':
-        let tmpp1 = state
-        tmpp1.form.covid = action.payload.covid
-          return {...tmpp1}
+    case 'SET_Covid':
+      let tmpp1 = state
+      tmpp1.form.covid = action.payload.covid
+      return {...tmpp1}
         
     case 'SET_CITY':
       let tmp4 = state

@@ -20,8 +20,9 @@ const Trips = () => {
       <Main>
         <Heading title="Your trips" />
         <AllTrips>
-          {state.trips.length > 0 ? (
-            state.trips && state.trips.map(trip => {
+          {state?.trips.length === 0
+            ? 'No trips registered yet' : (
+            state?.trips.map(trip => {
               return (
                 <TripRow
                   as={motion.div}
@@ -37,9 +38,9 @@ const Trips = () => {
                 />
               )
             })
-          ) : (
-            <StyledLoader type="BallTriangle" color="var(--accent)" />
-          )}
+          )
+          } 
+            {/* <StyledLoader type="BallTriangle" color="var(--accent)" /> */}
         </AllTrips>
       </Main>
 

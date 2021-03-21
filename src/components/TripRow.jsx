@@ -14,7 +14,7 @@ import { ReactComponent as RemoveIcon } from 'assets/Remove.svg'
 const TripRow = ({ country, company, date, id, address }) => {
 
   const [modalIsOpen, setIsOpen] = useState(false)
-  const [state,dispatch] = useContext(TripContext)
+  const [state, dispatch] = useContext(TripContext)
   const animation = useAnimation()
 
   const getFlag = flag => {
@@ -84,6 +84,7 @@ const TripRow = ({ country, company, date, id, address }) => {
       <Modal
         isOpen={modalIsOpen}
         style={customStyles}
+        ariaHideApp={false}
         onRequestClose={()=> setIsOpen(false)}
       >
         <Form
@@ -120,6 +121,7 @@ const TripRow = ({ country, company, date, id, address }) => {
         initial={{ y: -200 }}
         animate={animation}
         onLoad={sequence}
+        ariaHideApp={false}
         whileHover={{ boxShadow: '2px 6px 10px rgba(0,0,0,0.3)' }}
       >
         <FlagColumn>

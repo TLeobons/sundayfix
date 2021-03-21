@@ -1,36 +1,32 @@
-import { ReactComponent as Check } from 'assets/Check.svg'
+import { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import styled from 'styled-components'
+import Loader from 'react-loader-spinner'
+import Modal from 'react-modal'
+import { Link } from 'react-router-dom'
+import moment from 'moment'
+import Dropdown from 'react-dropdown'
+import DatePicker from 'react-datepicker'
+
 import Heading from 'components/Heading'
 import Sidebar from 'components/Sidebar'
 import SidebarCard from 'components/SidebarCard'
 import { TripContext } from 'contexts/TripContext'
-import { motion } from 'framer-motion'
-import moment from 'moment'
-import React, { useContext, useEffect } from 'react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import Dropdown from 'react-dropdown'
-import { useParams } from 'react-router-dom'
-import 'react-dropdown/style.css'
-import Loader from 'react-loader-spinner'
-import Modal from 'react-modal'
-import { Link } from 'react-router-dom'
 import { api } from 'services/httpService'
+
+import 'react-datepicker/dist/react-datepicker.css'
+import 'react-dropdown/style.css'
 import { device } from 'style/responsive'
-import styled from 'styled-components'
+import { ReactComponent as Check } from 'assets/Check.svg'
 
 const NewTrip = () => {
+
   const [state, dispatch] = useContext(TripContext)
-  console.log('form data', state.form)
   const { id } = useParams()
 
   const xValues = [5000, -40, 0]
-  const [modalIsOpen, setIsOpen] = React.useState(false)
-  function openModal() {
-    setIsOpen(true)
-  }
-  function closeModal() {
-    setIsOpen(false)
-  }
+  const [modalIsOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -42,17 +38,9 @@ const NewTrip = () => {
 
   const editTrip = async () => {
     try {
-      const response = await api.put(`/trip/${id}`, state.form, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Headers':
-            'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-          'Access-Control-Request-Method': 'GET, POST, DELETE, PUT, OPTIONS',
-        },
-      })
+      const response = await api.put(`/trip/${id}`, state.form)
       dispatch({ type: 'EDIT_TRIP', payload: response.data })
-      await openModal()
+      await setIsOpen(true)
     } catch (e) {
       console.error(e)
     }
@@ -70,7 +58,6 @@ const NewTrip = () => {
     },
   }
 
-
   let startDate =
     state.form.start_date !== ''
       ? moment(state.form.start_date, 'YYYY-MM-DD').toDate()
@@ -83,13 +70,12 @@ const NewTrip = () => {
 
   return (
     <Container>
-      {/*  */}
       <Main>
         <Heading title="Edit trip" />
         <Modal
           isOpen={modalIsOpen}
           style={customStyles}
-          onRequestClose={closeModal}
+          onRequestClose={() => setIsOpen(false)}
         >
           <Form
             initial={{ opacity: 0, scale: 0.75 }}
@@ -118,7 +104,6 @@ const NewTrip = () => {
           <FormContent>
             <InnerForm>
               <FormGroup>
-                {/* <FormInnerGroup animate={{ x: xValues }} transition={{ duration: 1 }}> */}
                 <DPDown animate={{ x: xValues }} transition={{ duration: 1 }}>
                   <Label htmlFor="countries">Where do you want to go</Label>
                   <Dropdown
@@ -130,14 +115,6 @@ const NewTrip = () => {
                     placeholder={state.form.address.country || 'Select country'}
                     value={state.form.address.country}
                     onChange={data => {
-                      /*dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          address: {
-                            country: data.value,
-                          },
-                        },
-                      })*/
                       dispatch({
                         type: 'SET_SELECTED_COUNTRY',
                         payload: data.value,
@@ -145,7 +122,6 @@ const NewTrip = () => {
                     }}
                   />
                 </DPDown>
-                {/* </FormInnerGroup> */}
               </FormGroup>
 
               <FormGroup>
@@ -175,9 +151,6 @@ const NewTrip = () => {
                       showMonthYearDropdown
                       dateFormat="dd. MM. yyyy"
                       minDate={moment().toDate()}
-                    // startDate={startDate}
-                    // endDate={endDate}
-                    // value={startDate}
                     />
                   </DatePickerWrap>
                 </FormInnerGroup>
@@ -204,16 +177,8 @@ const NewTrip = () => {
                       placeholderText="dd. mm. year"
                       dateFormat="dd. MM. yyyy"
                       minDate={moment().toDate()}
-                      // showMonthDropdown
-                      // showYearDropdown
-                      // showMonthYearDropdown
                       showTwoColumnMonthYearPicker
                       showPopperArrow={false}
-                    // selectsEnd
-                    // value={endDate}
-                    // startDate={state.form.start_date}
-                    // endDate={state.form.end_date}
-                    // minDate={state.form.start_date}
                     />
                   </DatePickerWrap>
                 </FormInnerGroup>
@@ -238,7 +203,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.company_name}
                   />
                 </FormInnerGroup>
 
@@ -262,7 +226,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.city}
                   />
                 </FormInnerGroup>
 
@@ -286,7 +249,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.street}
                   />
                 </FormInnerGroup>
 
@@ -312,7 +274,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.street_num}
                   />
                 </FormInnerGroup>
 
@@ -336,7 +297,6 @@ const NewTrip = () => {
                         },
                       })
                     }}
-                  // value={state.form.address.zip}
                   />
                 </FormInnerGroup>
               </FormGroup>

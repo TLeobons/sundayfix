@@ -21,7 +21,7 @@ const Trips = () => {
         <Heading title="Your trips" />
         <AllTrips>
           {state?.trips.length === 0
-            ? (state?.tripsInited === true ? ('No trips registered yet') : <StyledLoader type="BallTriangle" color="var(--accent)" />) : (
+            ? (state?.tripsInStore === true ? <NoTrips>No trips registered yet</NoTrips> : <StyledLoader type="BallTriangle" color="var(--accent)" />) : (
             state?.trips.map(trip => {
               return (
                 <TripRow
@@ -40,7 +40,6 @@ const Trips = () => {
             })
           )
           } 
-            {/* <StyledLoader type="BallTriangle" color="var(--accent)" /> */}
         </AllTrips>
       </Main>
 
@@ -58,7 +57,12 @@ const StyledLoader = styled(Loader)`
   justify-content: center;
   margin: 150px;
 `
-
+const NoTrips = styled(motion.div)`
+  text-align: center;
+  margin: 4rem;
+  font-size: 3rem;
+  color: var(--dark-grey)
+`
 const Container = styled.div`
   display: flex;
   justify-content: center;

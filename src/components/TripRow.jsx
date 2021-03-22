@@ -14,7 +14,7 @@ import { ReactComponent as RemoveIcon } from 'assets/Remove.svg'
 const TripRow = ({ country, company, date, id, address }) => {
 
   const [modalIsOpen, setIsOpen] = useState(false)
-  const [state, dispatch] = useContext(TripContext)
+  const [, dispatch] = useContext(TripContext)
   const animation = useAnimation()
 
   const getFlag = flag => {

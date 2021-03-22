@@ -45,6 +45,7 @@ const reducer = (state, action) => {
         },
         countries: [...state.countries],
         selectedCountry: '',
+        tripsInited: false
       }
       case 'EDIT_TRIP': 
       
@@ -53,6 +54,7 @@ const reducer = (state, action) => {
         form: {...state.form },
         countries: [...state.countries],
         selectedCountry: `flag-${state.selectedCountry}`,
+        tripsInited: true
       }
       let newTrip = {...state.form,id:action.payload.id}
       newState.trips = newState.trips.filter(item=> item.id !== action.payload.id)
@@ -81,6 +83,7 @@ const reducer = (state, action) => {
         form: { ...state.form },
         countries: [...state.countries],
         selectedCountry: `flag-${state.selectedCountry}`,
+        tripsInited: true
       }
     case 'SET_COUNTRIES':
       return {

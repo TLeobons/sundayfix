@@ -279,6 +279,7 @@ const NewTrip = () => {
                     required
                     id="streetNumber"
                     name="streetNumber"
+                    type="number" //remove this line when back-end allows strings for this field
                     placeholder={
                       state.form.address.street_num || 'Type here ...'
                     }

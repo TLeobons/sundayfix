@@ -263,6 +263,7 @@ const NewTrip = () => {
                     required
                     id="streetNumber"
                     name="streetNumber"
+                    type="number" //remove this line when back-end allows strings for this field
                     placeholder="Type here..."
                     onChange={e => {
                       dispatch({

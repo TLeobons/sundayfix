@@ -21,7 +21,7 @@ const Trips = () => {
         <Heading title="Your trips" />
         <AllTrips>
           {state?.trips.length === 0
-            ? 'No trips registered yet' : (
+            ? (state?.tripsInited === true ? ('No trips registered yet') : <StyledLoader type="BallTriangle" color="var(--accent)" />) : (
             state?.trips.map(trip => {
               return (
                 <TripRow

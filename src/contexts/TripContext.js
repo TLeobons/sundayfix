@@ -21,6 +21,7 @@ const initialState = {
   },
   countries: [],
   selectedCountry: '',
+  tripsInited: false
 }
 
 const reducer = (state, action) => {
@@ -64,6 +65,7 @@ const reducer = (state, action) => {
         form: { ...state.form },
         countries: [...state.countries],
         selectedCountry: `flag-${state.selectedCountry}`,
+        tripsInited: true
       }
     case 'ADD_TRIP':
       return {

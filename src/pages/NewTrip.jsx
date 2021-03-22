@@ -269,7 +269,7 @@ const NewTrip = () => {
                         type: 'SET_StreetNumber',
                         payload: {
                           address: {
-                            street_num: Number(e.target.value),
+                            street_num: e.target.value,
                           },
                         },
                       })
